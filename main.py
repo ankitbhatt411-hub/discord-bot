@@ -1,28 +1,27 @@
+import os
 import discord
 from discord.ext import commands
 
 # ==============================
-# PUT TOKEN + HER USER ID HERE
+#  SECRET TOKEN VIA ENV (RENDER)
 # ==============================
 BOT_TOKEN = os.getenv("BOT_TOKEN")          # comes from Render Environment
-TARGET_USER_ID = H514343791797338113         # <-- put her Discord ID (numbers only)
-# Example: TARGET_USER_ID = 123456789012345678
+TARGET_USER_ID = 514343791797338113        # put her numeric Discord ID
 
-# ==============================
-# BOT SETUP
-# ==============================
+# Example:
+# TARGET_USER_ID = 123456789012345678
+
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 ticket_channel = None  # will store the created ticket channel
 
+
 @bot.event
 async def on_ready():
     print(f"Bot is online as {bot.user}")
 
-# =======================================
-# OPEN TICKET COMMAND
-# =======================================
+
 @bot.command()
 async def openticket(ctx):
     global ticket_channel
@@ -30,7 +29,7 @@ async def openticket(ctx):
     guild = ctx.guild
     user = await bot.fetch_user(TARGET_USER_ID)
 
-    # Create ticket channel
+    # create ticket channel
     ticket_channel = await guild.create_text_channel(f"ticket-{user.name}")
     await ticket_channel.send(
         f"💬 Ticket opened to chat with **{user.name}**.\n"
@@ -38,24 +37,22 @@ async def openticket(ctx):
     )
     await ctx.send("✅ Ticket created!")
 
-# =======================================
-# DM RELAY SYSTEM
-# =======================================
+
 @bot.event
 async def on_message(message):
     global ticket_channel
 
-    # Ignore bot messages
+    # ignore bot messages
     if message.author == bot.user:
         return
 
-    # ========== MESSAGE FROM TICKET → DM HER ==========
+    # 1) message from ticket channel → DM her
     if ticket_channel and message.channel == ticket_channel and not message.author.bot:
         user = await bot.fetch_user(TARGET_USER_ID)
         await user.send(message.content)
         return
 
-    # ========== MESSAGE FROM HER DM → SEND TO TICKET ==========
+    # 2) message from her DM → send to ticket channel
     if message.author.id == TARGET_USER_ID and isinstance(message.channel, discord.DMChannel):
         if ticket_channel:
             await ticket_channel.send(f"**Her:** {message.content}")
@@ -63,6 +60,5 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
-# RUN BOT
-bot.run(BOT_TOKEN)
 
+bot.run(BOT_TOKEN)
