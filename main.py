@@ -4,7 +4,7 @@ from discord.ext import commands
 # ==============================
 # PUT TOKEN + HER USER ID HERE
 # ==============================
-TOKEN = os.getenv("BOT_TOKEN")          # <-- paste your token
+BOT_TOKEN = os.getenv("BOT_TOKEN")          # <-- paste your token
 TARGET_USER_ID = H514343791797338113         # <-- put her Discord ID (numbers only)
 # Example: TARGET_USER_ID = 123456789012345678
 
