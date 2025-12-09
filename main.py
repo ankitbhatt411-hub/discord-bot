@@ -6,7 +6,7 @@ from discord.ext import commands
 #  SECRET TOKEN VIA ENV (RENDER)
 # ==============================
 BOT_TOKEN = os.getenv("BOT_TOKEN")          # comes from Render Environment
-TARGET_USER_ID = 514343791797338113        # put her numeric Discord ID
+TARGET_USER_ID = 1345360711664013332        # put her numeric Discord ID
 
 # Example:
 # TARGET_USER_ID = 123456789012345678
